@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/jkwonny/RaffleKing#readme",
   "dependencies": {
+    "apify": "^0.21.4",
     "puppeteer": "^5.3.1"
   }
 }
