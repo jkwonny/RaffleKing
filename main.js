@@ -1,17 +1,20 @@
-const puppeteer = require('puppeteer');
+const Apify = require('apify');
 
-(async () => {
-  const browser = await puppeteer.launch({headless: false});
-  const page = await browser.newPage();
-  setTimeout(function() {
-    console.log('hello world!');
-  }, 5000);
-  await page.goto('http://www.baitme.com/nike-kobe-v-protro-pj-tucker-pe');
-  setTimeout(function() {
-    console.log('hello world!');
-  }, 5000);
-//   await page.type('#first_name', 'Justin');
-//   await page.type('#last_name', 'Justin');
+Apify.main(async () => {
+    const requestQueue = await Apify.openRequestQueue();
+    await requestQueue.addRequest({ url: 'https://www.iana.org/' });
+    const pseudoUrls = [new Apify.PseudoUrl('https://www.iana.org/[.*]')];
 
-//   await browser.close();
-})();
+    const crawler = new Apify.PuppeteerCrawler({
+        requestQueue,
+        handlePageFunction: async ({ request, page }) => {
+            const title = await page.title();
+            console.log(`Title of ${request.url}: ${title}`);
+            await Apify.utils.enqueueLinks({ page, selector: 'a', pseudoUrls, requestQueue });
+        },
+        maxRequestsPerCrawl: 100,
+        maxConcurrency: 10,
+    });
+
+    await crawler.run();
+});
