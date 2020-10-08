@@ -17,8 +17,13 @@
   },
   "homepage": "https://github.com/jkwonny/RaffleKing#readme",
   "dependencies": {
+<<<<<<< HEAD
     "promise-poller": "^1.9.1",
     "puppeteer": "^5.3.0",
     "request-promise-native": "^1.0.9"
+=======
+    "apify": "^0.21.4",
+    "puppeteer": "^5.3.1"
+>>>>>>> c6203c00508eb530f48deaadbf3791cd6cb5bff6
   }
 }
