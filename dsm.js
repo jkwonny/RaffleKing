@@ -39,6 +39,8 @@ const proxy = ['108.165.20.125:11012',
   '108.165.20.173:11060',
   '108.165.20.174:11061'];
  
+  const APIKey = "f708d28ffdc8b669b7174e7c61f0354a"; 
+  
 
 const runFunction = (proxy, billing) => {
   puppeteer.launch({ headless: false, args: [ `--proxy-server=${proxy}` ] }).then(async browser => {
@@ -55,12 +57,90 @@ const runFunction = (proxy, billing) => {
     await page.type('#field100228044', billing.zipcode);
     await page.click('#fsSubmitButton4094992');
 
+    const googleKey = "this comes from right clicking the 2captcha and getting the k= in the iframe url";
+    const pageUrl = 'https://newyork.doverstreetmarket.com/new-items/raffle';
+    const proxyType = 'HTTPS'; //idk lemme know what the proxy type is
     // figure out captcha stuff
-  
+
+    solveCaptchaV2(APIKey, googleKey, pageUrl, proxy, proxyType);
   
     console.log(`Raffle entries complete ✨`)
   })
 }
+
+function solveCaptchaV2(APIKey, googleKey, pageUrl, proxy, proxyType) {
+  var requestUrl =
+    "http://2captcha.com/in.php?key=" +
+    APIKey +
+    "&method=userrecaptcha&googlekey=" +
+    googleKey +
+    "&pageurl=" +
+    pageUrl +
+    "&proxy=" +
+    proxy +
+    "&proxytype=";
+
+  switch (proxyType) {
+    case "HTTP":
+      requestUrl = requestUrl + "HTTP";
+      break;
+
+    case "HTTPS":
+      requestUrl = requestUrl + "HTTPS";
+      break;
+
+    case "SOCKS4":
+      requestUrl = requestUrl + "SOCKS4";
+      break;
+
+    case "SOCKS5":
+      requestUrl = requestUrl + "SOCKS5";
+      break;
+  }
+
+  $.ajax({
+    url: "requestUrl",
+    success: function (result) {
+      if (result.length < 3) {
+        return false;
+      } else {
+        if (result.substring(0, 3) == "OK|") {
+          var captchaID = result.substring(3);
+
+          for (var i = 0; i < 24; i++) {
+            var ansUrl =
+              "http://2captcha.com/res.php?key=" +
+              APIKey +
+              "&action=get&id=" +
+              captchaID;
+
+            $.ajax({
+              url: "ansUrl",
+              success: function (ansresult) {
+                if (ansresult.length < 3) {
+                  return ansresult;
+                } else {
+                  if (ansresult.substring(0, 3) == "OK|") {
+                    return ansresult;
+                  } else if (ansresult != "CAPCHA_NOT_READY") {
+                    return ansresult;
+                  }
+                }
+              },
+            });
+            await.sleep(5000);
+          }
+        } else {
+          return ansresult;
+        }
+      }
+    },
+    fail: function () {
+      return "";
+    },
+  });
+}
+
 
 
 for (let i = 0; i < billingAccounts.length; i++) {
