@@ -59,11 +59,18 @@ const runFunction = (proxy, billing) => {
 
     const googleKey = "this comes from right clicking the 2captcha and getting the k= in the iframe url";
     const pageUrl = 'https://newyork.doverstreetmarket.com/new-items/raffle';
-    const proxyType = 'HTTPS'; //idk lemme know what the proxy type is
+    const proxyType = 'HTTPS'; 
     // figure out captcha stuff
+    const googleSiteKey = document.getElementsByClassName('g-recaptcha')[0].getAttribute('data-sitekey');
 
-    solveCaptchaV2(APIKey, googleKey, pageUrl, proxy, proxyType);
-  
+
+    const token = solveCaptchaV2(APIKey, googleSiteKey, pageUrl, proxy, proxyType);
+    
+    await page.evaluate((token) => {
+        document.querySelector('#g-recaptcha-response').value = token
+    }, token)
+
+
     console.log(`Raffle entries complete ✨`)
   })
 }
