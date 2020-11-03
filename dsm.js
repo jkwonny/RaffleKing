@@ -156,7 +156,7 @@ async function solveCaptchaV2(APIKey, googleKey, pageUrl, proxy, proxyType) {
   });
 }
 
-// commit
+// 
 
 // for (let i = 0; i < billingAccounts.length; i++) {
 //   runFunction(proxy[i], billingAccounts[i]);
