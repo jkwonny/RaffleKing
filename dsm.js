@@ -13,31 +13,31 @@ const billingAccounts = [{ fullname: 'zelda kwon', email: 'zeldakwonny@perfitsty
 { fullname: 'jesus kwon', email: 'believeinjesus123@perfitstyles.com', phonenumber: '6268889382', address: '1307QQ North Bronson Ave. Unit 402', zipcode: '90028'},
 { fullname: 'Ellen kwon', email: 'ellendageneroushaha@perfitstyles.com', phonenumber: '6263773123', address: '1307GG North Bronson Ave. Unit 402', zipcode: '90028'}]
 
-const proxy = ['108.165.20.125:11012',
-  '108.165.20.126:11013',
-  '108.165.20.127:11014',
-  '108.165.20.128:11015',
-  '108.165.20.129:11016',
-  '108.165.20.130:11017',
-  '108.165.20.156:11043',
-  '108.165.20.157:11044',
-  '108.165.20.158:11045',
-  '108.165.20.159:11046',
-  '108.165.20.160:11047',
-  '108.165.20.161:11048',
-  '108.165.20.162:11049',
-  '108.165.20.163:11050',
-  '108.165.20.164:11051',
-  '108.165.20.165:11052',
-  '108.165.20.166:11053',
-  '108.165.20.167:11054',
-  '108.165.20.168:11055',
-  '108.165.20.169:11056',
-  '108.165.20.170:11057',
-  '108.165.20.171:11058',
-  '108.165.20.172:11059',
-  '108.165.20.173:11060',
-  '108.165.20.174:11061'];
+const proxy = ['50.114.231.231:65075',
+  '50.114.231.232:65075',
+  '50.114.231.233:65075',
+  '50.114.231.234:65075',
+  '50.114.231.235:65075',
+  '50.114.231.236:65075',
+  '50.114.231.237:65075',
+  '50.114.231.238:65075',
+  '50.114.231.239:65075',
+  '50.114.231.240:65075',
+  '50.114.231.241:65075',
+  '50.114.231.242:65075',
+  '50.114.231.243:65075',
+  '50.114.231.244:65075',
+  '50.114.231.245:65075',
+  '50.114.231.246:65075',
+  '50.114.231.247:65075',
+  '50.114.231.248:65075',
+  '50.114.231.249:65075',
+  '50.114.231.250:65075',
+  '50.114.231.251:65075',
+  '50.114.231.252:65075',
+  '50.114.231.253:65075',
+  '50.114.231.254:65075',
+  '50.114.232.2:65075'];
  
   const APIKey = "f708d28ffdc8b669b7174e7c61f0354a"; 
   
@@ -46,25 +46,33 @@ const runFunction = (proxy, billing) => {
   puppeteer.launch({ headless: false, args: [ `--proxy-server=${proxy}` ] }).then(async browser => {
     console.log('Running tests..')
     const page = await browser.newPage()
-    await page.goto('https://newyork.doverstreetmarket.com/new-items/raffle');
-    await page.waitFor(5000)
-    await page.type('#field100228038', billing.fullname);
-    await page.type('#field100228039', billing.email);
-    await page.type('#field100228040', billing.phonenumber);
-    await page.select("#field100228041", "US 10");
-    await page.type('#field100228042', billing.address);
-    await page.select('#field100228043', 'California');
-    await page.type('#field100228044', billing.zipcode);
-    await page.click('#fsSubmitButton4094992');
+    page.evaluate(() => {
+      var script = document.createElement('script');
+      script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';
+      script.type = 'text/javascript';
+      document.getElementsByTagName('head')[0].appendChild(script);
+    })
+
+    await page.goto('https://newyork.doverstreetmarket.com/new-items/jordan-v-ow');
+    await page.waitFor(5000);
+    await page.type('#field100917790', billing.fullname);
+    await page.type('#field100917791', billing.email);
+    await page.type('#field100917792', billing.phonenumber);
+    await page.select("#field100917793", "US 10");
+    await page.type('#field100917794', billing.address);
+    await page.select('#field100917795', 'California');
+    await page.type('#field100917796', billing.zipcode);
+    await page.click('#field100917797_2')
+    await page.click('#fsSubmitButton4113892');
 
     const googleKey = "this comes from right clicking the 2captcha and getting the k= in the iframe url";
-    const pageUrl = 'https://newyork.doverstreetmarket.com/new-items/raffle';
+    const pageUrl = 'https://newyork.doverstreetmarket.com/new-items/jordan-v-ow';
     const proxyType = 'HTTPS'; 
     // figure out captcha stuff
-    const googleSiteKey = document.getElementsByClassName('g-recaptcha')[0].getAttribute('data-sitekey');
+    // const googleSiteKey = document.getElementsByClassName('g-recaptcha')[0].getAttribute('data-sitekey');
+    const googleSiteKey = '6LetKEIUAAAAAPk-uUXqq9E82MG3e40OMt_74gjS&cb=ge437niah36c';
 
-
-    const token = solveCaptchaV2(APIKey, googleSiteKey, pageUrl, proxy, proxyType);
+    const token = await solveCaptchaV2(APIKey, googleSiteKey, pageUrl, proxy, proxyType);
     
     await page.evaluate((token) => {
         document.querySelector('#g-recaptcha-response').value = token
@@ -75,7 +83,7 @@ const runFunction = (proxy, billing) => {
   })
 }
 
-function solveCaptchaV2(APIKey, googleKey, pageUrl, proxy, proxyType) {
+async function solveCaptchaV2(APIKey, googleKey, pageUrl, proxy, proxyType) {
   var requestUrl =
     "http://2captcha.com/in.php?key=" +
     APIKey +
@@ -148,8 +156,10 @@ function solveCaptchaV2(APIKey, googleKey, pageUrl, proxy, proxyType) {
   });
 }
 
+// commit
 
+// for (let i = 0; i < billingAccounts.length; i++) {
+//   runFunction(proxy[i], billingAccounts[i]);
+// }
 
-for (let i = 0; i < billingAccounts.length; i++) {
-  runFunction(proxy[i], billingAccounts[i]);
-}
+runFunction(proxy[0], billingAccounts[0]);
